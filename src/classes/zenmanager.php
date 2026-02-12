@@ -1,12 +1,12 @@
 <?php
 
-namespace classes;
+namespace projet\classes;
 
 use Illuminate\Database\Capsule\Manager as DB;
-use models\Reservation;
-use models\Service;
-use models\Cabine;
-use models\Hotesse;
+use projet\models\Reservation;
+use projet\models\Service;
+use projet\models\Cabine;
+use projet\models\Hotesse;
 use Exception;
 
 class ZenManager {
@@ -131,6 +131,49 @@ class ZenManager {
 
         } catch (Exception $e) {
             DB::rollBack();
+            throw $e;
+        }
+    }
+
+    public function annulerReservation(int $numRes) {
+        try {
+            DB::beginTransaction();
+            $reservation = Reservation::find($numRes);
+            
+            if (!$reservation) {
+                throw new Exception("Réservation introuvable.");
+            }
+            
+            if ($reservation->datpaie != null) {
+                throw new Exception("Impossible d'annuler : réservation déjà payée/consommée.");
+            }
+            
+            $reservation->services()->detach();
+            $reservation->delete();
+            
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    public function modifierService(int $numServ, ?float $nouveauPrix, ?int $nouveauStock) {
+        try {
+            $service = Service::find($numServ);
+            if (!$service) {
+                throw new Exception("Service introuvable.");
+            }
+
+            if ($nouveauPrix !== null) {
+                $service->prixunit = $nouveauPrix;
+            }
+            if ($nouveauStock !== null) {
+                $service->nbrinterventions = $nouveauStock;
+            }
+            
+            $service->save();
+        } catch (Exception $e) {
             throw $e;
         }
     }

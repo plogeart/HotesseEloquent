@@ -1,11 +1,17 @@
 <?php
+// AJOUTEZ CECI TEMPORAIREMENT POUR DÉBUGGER
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// ... le reste du code
 require_once 'vendor/autoload.php';
 
 use Illuminate\Database\Capsule\Manager as DB;
-use zenhealth\models\Cabine;
-use zenhealth\models\Service;
-use zenhealth\models\Hotesse;
-use zenhealth\models\Reservation;
+use models\Cabine;
+use models\Service;
+use models\Hotesse;
+use models\Reservation;
 
 $conf = parse_ini_file('src/conf/conf.ini');
 

@@ -1,5 +1,6 @@
 <?php
-namespace zenhealth\models;
+
+namespace models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -7,14 +8,9 @@ class Hotesse extends Model {
     protected $table = 'hotesse';
     protected $primaryKey = 'numhot';
     public $timestamps = false;
-    public $incrementing = false;
+    protected $fillable = ['email', 'passwd', 'nomserv', 'grade'];
 
     public function cabines() {
-        return $this->belongsToMany(
-            'zenhealth\models\Cabine',
-            'affecter',
-            'numhot',
-            'numcab'
-        )->withPivot('dataff');
+        return $this->belongsToMany(Cabine::class, 'affecter', 'numhot', 'numcab');
     }
 }

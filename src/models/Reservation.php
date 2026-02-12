@@ -1,5 +1,6 @@
 <?php
-namespace zenhealth\models;
+
+namespace models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -7,20 +8,14 @@ class Reservation extends Model {
     protected $table = 'reservation';
     protected $primaryKey = 'numres';
     public $timestamps = false;
-    public $incrementing = false;
-
-    protected $dates = ['datres', 'datpaie'];
+    protected $fillable = ['numcab', 'datres', 'nbpers', 'datpaie', 'modpaie', 'montcom'];
 
     public function cabine() {
-        return $this->belongsTo('zenhealth\models\Cabine', 'numcab');
+        return $this->belongsTo(Cabine::class, 'numcab');
     }
 
     public function services() {
-        return $this->belongsToMany(
-            'zenhealth\models\Service',
-            'commande',
-            'numres',
-            'numserv'
-        )->withPivot('nbrinterevntions');
+        return $this->belongsToMany(Service::class, 'commande', 'numres', 'numserv')
+                    ->withPivot('nbrinterevntions');
     }
 }

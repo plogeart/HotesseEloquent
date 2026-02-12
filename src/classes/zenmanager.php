@@ -177,4 +177,17 @@ class ZenManager {
             throw $e;
         }
     }
+
+    // --- AUTHENTIFICATION GÉNÉRIQUE ---
+    public function login(int $id, string $password) {
+        $h = Hotesse::find($id);
+        if (!$h) {
+            throw new Exception("Identifiant inconnu.");
+        }
+        if ($h->passwd !== $password) {
+            throw new Exception("Mot de passe incorrect.");
+        }
+        // On retourne l'utilisateur quel que soit son grade
+        return $h;
+    }
 }

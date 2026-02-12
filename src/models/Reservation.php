@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Reservation extends Model {
     protected $table = 'reservation';
     protected $primaryKey = 'numres';
+    public $incrementing = false;
     public $timestamps = false;
-    protected $fillable = ['numcab', 'datres', 'nbpers', 'datpaie', 'modpaie', 'montcom'];
+    protected $fillable = ['numres', 'numcab', 'datres', 'nbpers', 'datpaie', 'modpaie', 'montcom'];
 
     public function cabine() {
         return $this->belongsTo(Cabine::class, 'numcab');

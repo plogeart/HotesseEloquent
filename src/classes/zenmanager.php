@@ -12,28 +12,46 @@ use Exception;
 class ZenManager {
 
     public function reserverCabine(int $numCabine, string $dateHeure, int $nbPersonnes) {
+        DB::beginTransaction();
+
         try {
-            DB::beginTransaction();
+            $cabine = Cabine::where('numcab', $numCabine)->lockForUpdate()->first();
 
-            $count = Reservation::where('numcab', $numCabine)
-                ->where('datres', $dateHeure)
-                ->count();
-
-            if ($count > 0) {
-                throw new Exception("La cabine est déjà réservée pour cette date.");
+            if (!$cabine) {
+                throw new Exception("Cabine introuvable");
             }
 
+            if ($cabine->nbplace < $nbPersonnes) {
+                throw new Exception("Capacité insuffisante");
+            }
+
+            $existe = Reservation::where('numcab', $numCabine)
+                ->where('datres', $dateHeure)
+                ->exists();
+
+            if ($existe) {
+                throw new Exception("Cabine déjà réservée à cette date");
+            }
+
+            $maxId = Reservation::max('numres');
+            $nextId = $maxId ? $maxId + 1 : 1;
+
             $reservation = new Reservation();
+            $reservation->numres = $nextId;
             $reservation->numcab = $numCabine;
             $reservation->datres = $dateHeure;
             $reservation->nbpers = $nbPersonnes;
+            
+            $reservation->timestamps = false; 
+
             $reservation->save();
 
             DB::commit();
+
             return $reservation;
 
         } catch (Exception $e) {
-            DB::rollBack();
+            DB::rollback();
             throw $e;
         }
     }
@@ -178,7 +196,6 @@ class ZenManager {
         }
     }
 
-    // --- AUTHENTIFICATION GÉNÉRIQUE ---
     public function login(int $id, string $password) {
         $h = Hotesse::find($id);
         if (!$h) {
@@ -187,7 +204,6 @@ class ZenManager {
         if ($h->passwd !== $password) {
             throw new Exception("Mot de passe incorrect.");
         }
-        // On retourne l'utilisateur quel que soit son grade
         return $h;
     }
 }

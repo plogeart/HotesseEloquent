@@ -14,7 +14,6 @@ use projet\models\Cabine;
 use projet\models\Hotesse;
 use projet\models\Reservation;
 
-// --- INITIALISATION ---
 $conf = parse_ini_file('src/conf/conf.ini');
 $capsule = new Capsule;
 $capsule->addConnection([

@@ -33,17 +33,14 @@ $capsule->bootEloquent();
 $manager = new ZenManager();
 $message = "";
 
-// --- GESTION DES DROITS ---
 $isLogged = isset($_SESSION['user_id']);
 $userGrade = $_SESSION['grade'] ?? null;
 $isGestionnaire = ($userGrade === 'gestionnaire');
 
-// --- TRAITEMENT POST ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_form'])) {
     try {
         switch ($_POST['action_form']) {
             
-            // Login (Accessible à tous les non-connectés)
             case 'login':
                 $user = $manager->login((int)$_POST['login_id'], $_POST['login_pass']);
                 $_SESSION['user_id'] = $user->numhot;
@@ -60,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_form'])) {
                 header("Location: index.php");
                 exit;
 
-            // Actions Communes (Hotesse + Gestionnaire)
             case 'reserver':
                 if (!$isLogged) throw new Exception("Veuillez vous connecter.");
                 $res = $manager->reserverCabine((int)$_POST['numcab'], $_POST['datres'], (int)$_POST['nbpers']);
@@ -73,7 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_form'])) {
                 $message = "SUCCÈS : Service ajouté.";
                 break;
 
-            // Actions Réservées (Gestionnaire uniquement)
             case 'affecter':
                 if (!$isGestionnaire) throw new Exception("Droits insuffisants.");
                 $manager->affecterHotesse((int)$_POST['numhot'], (int)$_POST['numcab']);

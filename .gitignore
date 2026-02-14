@@ -2,3 +2,6 @@
 *.xml
 *.iml
 *.idea
+*.lock
+
+vendor/

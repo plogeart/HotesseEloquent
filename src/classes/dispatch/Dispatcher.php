@@ -13,14 +13,22 @@ use projet\classes\action\GererServicesAction;
 use projet\classes\action\AnnulerAction;
 use projet\classes\auth\AuthnProvider;
 
+/**
+ * Class Dispatcher
+ * Analyse la requête, instancie l'Action correspondante et génère la page HTML.
+ */
 class Dispatcher {
 
     private string $actionQuery;
 
     public function __construct() {
+        //Récupération de l'action
         $this->actionQuery = $_GET['action'] ?? 'default';
     }
 
+    /**
+     * Exécute le routage
+     */
     public function run(): void {
         $isLogged = AuthnProvider::isSignedIn();
 
@@ -58,6 +66,7 @@ class Dispatcher {
             }
         }
 
+        //Exécution de l'action et récupération de l'HTML
         try {
             $html = $action->execute();
         } catch (\Exception $e) {
@@ -65,12 +74,18 @@ class Dispatcher {
             $html .= "<a href='?action=default'>Retour à l'accueil</a>";
         }
 
+        //Rendu de la page complète
         $this->renderPage($html);
     }
 
+    /**
+     * Génère le squelette HTML
+     * @param string $html Le contenu de l'action.
+     */
     private function renderPage(string $html): void {
         $menu = "";
 
+        //construction du menu si utilisateur connecté
         if (AuthnProvider::isSignedIn()) {
             $user = AuthnProvider::getSignedInUser();
             $nom = $user['nom'];
@@ -90,6 +105,7 @@ class Dispatcher {
                     <li><a href="?action=commander">Commander un service</a></li>
             HTML;
 
+            //Menu spécifique pour le gestionnaire
             if ($gest) {
                 $menu .= <<<HTML
                     <hr>

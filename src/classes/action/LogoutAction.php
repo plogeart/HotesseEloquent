@@ -1,10 +1,12 @@
 <?php
 namespace projet\classes\action;
 
+use projet\classes\auth\AuthnProvider;
+
 class LogoutAction extends Action {
 
     public function executeGet(): string {
-        session_destroy();
+        AuthnProvider::signout();
 
         $action = new LoginAction();
         return $action->execute();

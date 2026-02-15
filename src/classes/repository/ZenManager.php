@@ -9,8 +9,21 @@ use projet\models\Hotesse;
 use projet\models\Reservation;
 use projet\models\Service;
 
+/**
+ * Class ZenManager
+ * Gère les interactions avec la base de données.
+ */
 class ZenManager {
 
+    /**
+     * Crée une réservation pour une cabine donnée.
+     *
+     * @param int $numCabine ID de la cabine
+     * @param string $dateHeure Date et heure de réservation
+     * @param int $nbPersonnes Nombre de personnes
+     * @return Reservation La réservation créée
+     * @throws Exception Si cabine introuvable, capacité insuffisante ou déjà réservée
+     */
     public static function reserverCabine(int $numCabine, string $dateHeure, int $nbPersonnes) : Reservation {
         DB::beginTransaction();
 
@@ -55,6 +68,14 @@ class ZenManager {
         }
     }
 
+    /**
+     * Ajoute un service à une réservation existante.
+     *
+     * @param int $numRes ID de la réservation
+     * @param int $numServ ID du service
+     * @param int $quantite Quantité demandée
+     * @throws Exception Si stock insuffisant ou réservation déjà payée.
+     */
     public static function commanderService(int $numRes, int $numServ, int $quantite) : void {
         try {
             DB::beginTransaction();
@@ -94,6 +115,13 @@ class ZenManager {
         }
     }
 
+    /**
+     * Affecte une hôtesse à une cabine.
+     *
+     * @param int $numHot ID de l'hôtesse
+     * @param int $numCab ID de la cabine
+     * @throws Exception Si la cabine a déjà une hôtesse
+     */
     public static function affecterHotesse(int $numHot, int $numCab) : void {
         try {
             DB::beginTransaction();
@@ -123,6 +151,14 @@ class ZenManager {
         }
     }
 
+    /**
+     * Calcule le total et enregistre le paiement
+     *
+     * @param int $numRes ID Réservation
+     * @param string $modePaiement Mode
+     * @return float Le montant total calculé
+     * @throws Exception Si déjà payé.
+     */
     public static function encaisserReservation(int $numRes, string $modePaiement) : float {
         try {
             DB::beginTransaction();
@@ -162,6 +198,12 @@ class ZenManager {
         }
     }
 
+    /**
+     * Annule et supprime une réservation
+     *
+     * @param int $numRes ID Réservation
+     * @throws Exception Si la réservation est déjà payée.
+     */
     public static function annulerReservation(int $numRes) {
         try {
             DB::beginTransaction();
@@ -190,6 +232,14 @@ class ZenManager {
         }
     }
 
+    /**
+     * Modifie les propriétés d'un service
+     *
+     * @param int $numServ ID Service
+     * @param float|null $nouveauPrix Nouveau prix
+     * @param int|null $nouveauStock Nouveau stock
+     * @throws Exception Si le service n'a pas été trouvé
+     */
     public static function modifierService(int $numServ, ?float $nouveauPrix, ?int $nouveauStock) {
         try {
             //Récupération

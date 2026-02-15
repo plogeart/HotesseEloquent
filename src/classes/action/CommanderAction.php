@@ -20,9 +20,9 @@ class CommanderAction extends Action {
     public function executePost(): string {
         try {
             ZenManager::commanderService((int)$_POST['numres'], (int)$_POST['numserv'], (int)$_POST['qte']);
-            return "<div style='color:green; font-weight:bold;'>SUCCÈS : Service ajouté à la commande.</div>" . $this->executeGet();
+            return "<div class='alert-succes'; font-weight:bold;'>SUCCÈS : Service ajouté à la commande.</div>" . $this->executeGet();
         } catch (\Exception $e) {
-            return "<div style='color:red'>ERREUR : " . $e->getMessage() . "</div>" . $this->executeGet();
+            return "<div class='alert-erreur'>ERREUR : " . $e->getMessage() . "</div>" . $this->executeGet();
         }
     }
 }

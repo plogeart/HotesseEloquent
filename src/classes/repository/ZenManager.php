@@ -11,7 +11,7 @@ use projet\models\Service;
 
 class ZenManager {
 
-    public static function reserverCabine(int $numCabine, string $dateHeure, int $nbPersonnes) {
+    public static function reserverCabine(int $numCabine, string $dateHeure, int $nbPersonnes) : Reservation {
         DB::beginTransaction();
 
         try {
@@ -55,7 +55,7 @@ class ZenManager {
         }
     }
 
-    public static function commanderService(int $numRes, int $numServ, int $quantite) {
+    public static function commanderService(int $numRes, int $numServ, int $quantite) : void {
         try {
             DB::beginTransaction();
 
@@ -75,6 +75,10 @@ class ZenManager {
                 throw new Exception("Réservation introuvable.");
             }
 
+            if ($reservation->datpaie !== null) {
+                throw new Exception("ERREUR : Impossible d'annuler : réservation déjà payée/consommée.");
+            }
+
             //Maj du stock
             $service->nbrinterventions -= $quantite;
             $service->save();
@@ -90,7 +94,7 @@ class ZenManager {
         }
     }
 
-    public static function affecterHotesse(int $numHot, int $numCab) {
+    public static function affecterHotesse(int $numHot, int $numCab) : void {
         try {
             DB::beginTransaction();
 
@@ -119,7 +123,7 @@ class ZenManager {
         }
     }
 
-    public static function encaisserReservation(int $numRes, string $modePaiement) {
+    public static function encaisserReservation(int $numRes, string $modePaiement) : float {
         try {
             DB::beginTransaction();
 
@@ -175,7 +179,7 @@ class ZenManager {
             //Suppression des liens dans la table pivot
             $reservation->services()->detach();
 
-            //Suppression de la réservation elle-même
+            //Suppression de la réservation elle-meme
             $reservation->delete();
 
             DB::commit();

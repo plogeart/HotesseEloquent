@@ -11,18 +11,18 @@ class AnnulerAction extends Action {
         try {
             Authz::checkRoleGestionnaire();
         } catch (AuthnException $e) {
-            return "<p style='color:red'>" . $e->getMessage() . "</p>";
+            return "<p class='alert-erreur'>" . $e->getMessage() . "</p>";
         }
 
         return <<<HTML
         <h3>Annuler une réservation</h3>
-        <div style="border: 1px solid red; padding: 10px; background: #ffe6e6; display:inline-block;">
+        <div class='alert-attention'>
             Attention: Cette action est irréversible.
         </div>
         <br><br>
         <form method="POST" action="?action=annuler">
             ID Réservation: <input type="number" name="numres" required><br><br>
-            <button type="submit" style="color:red; font-weight:bold;">Supprimer la réservation</button>
+            <button type="submit" class='btn-danger'>Supprimer la réservation</button>
         </form>
         HTML;
     }
@@ -32,11 +32,11 @@ class AnnulerAction extends Action {
             Authz::checkRoleGestionnaire();
 
             ZenManager::annulerReservation((int)$_POST['numres']);
-            return "<div style='color:green;'>SUCCÈS : La réservation a été annulée et supprimée.</div>" . $this->executeGet();
+            return "<div class='alert-succes'>SUCCÈS : La réservation a été annulée et supprimée.</div>" . $this->executeGet();
         } catch (AuthnException $e) {
-            return "<p style='color:red'>" . $e->getMessage() . "</p>";
+            return "<p class='alert-erreur'>" . $e->getMessage() . "</p>";
         } catch (\Exception $e) {
-            return "<div style='color:red'>ERREUR : " . $e->getMessage() . "</div>" . $this->executeGet();
+            return "<div class='alert-erreur'>ERREUR : " . $e->getMessage() . "</div>" . $this->executeGet();
         }
     }
 }

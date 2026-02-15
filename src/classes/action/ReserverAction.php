@@ -21,9 +21,9 @@ class ReserverAction extends Action {
     public function executePost(): string {
         try {
             $res = ZenManager::reserverCabine((int)$_POST['numcab'], $_POST['datres'], (int)$_POST['nbpers']);
-            return "<div style='color:green; font-weight:bold;'>SUCCÈS : Réservation effectuée (N° {$res->numres})</div>" . $this->executeGet();
+            return "<div class='alert-succes'>SUCCÈS : Réservation effectuée (N° {$res->numres})</div>" . $this->executeGet();
         } catch (\Exception $e) {
-            return "<div style='color:red'>Erreur : " . $e->getMessage() . "</div>" . $this->executeGet();
+            return "<div class='alert-erreur'>Erreur : " . $e->getMessage() . "</div>" . $this->executeGet();
         }
     }
 }

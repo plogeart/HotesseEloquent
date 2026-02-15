@@ -8,6 +8,7 @@ class Reservation extends Model {
     protected $table = 'reservation';
     protected $primaryKey = 'numres';
     public $timestamps = false;
+    public $incrementing = false;
 
     public function cabine() {
         return $this->belongsTo('projet\models\Cabine', 'numcab');

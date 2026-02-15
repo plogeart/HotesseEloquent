@@ -61,7 +61,7 @@ class Dispatcher {
         try {
             $html = $action->execute();
         } catch (\Exception $e) {
-            $html = "<div style='color:red'>Une erreur est survenue : " . $e->getMessage() . "</div>";
+            $html = "<div class='alert-erreur'>Une erreur est survenue : " . $e->getMessage() . "</div>";
             $html .= "<a href='?action=default'>Retour à l'accueil</a>";
         }
 
@@ -78,9 +78,9 @@ class Dispatcher {
             $gest = ($grade === 'gestionnaire');
 
             $menu = <<<HTML
-            <div style="background:#eef; padding:10px; border:1px solid #ccc; margin-bottom: 20px;">
+            <div class='user'>
                 <strong>$nom</strong> ($grade)
-                <a href="?action=logout" style="float:right; color:red; text-decoration:none;">Déconnexion</a>
+                <a href="?action=logout" class='btn-deco'>Déconnexion</a>
             </div>
             <fieldset>
                 <legend>Menu</legend>
@@ -109,7 +109,7 @@ class Dispatcher {
         <head>
             <meta charset="UTF-8">
             <title>ZenHealth</title>
-            <style>body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 20px; }</style>
+            <link rel="stylesheet" href="src/css/style.css">
         </head>
         <body>
             <h1>Application ZenHealth</h1>

@@ -11,7 +11,7 @@ class GererServicesAction extends Action {
         try {
             Authz::checkRoleGestionnaire();
         } catch (AuthnException $e) {
-            return "<p style='color:red'>" . $e->getMessage() . "</p>";
+            return "<p class='alert-erreur'>" . $e->getMessage() . "</p>";
         }
 
         return <<<HTML
@@ -35,11 +35,11 @@ class GererServicesAction extends Action {
 
             ZenManager::modifierService((int)$_POST['numserv'], $prix, $stock);
 
-            return "<div style='color:green;'>SUCCÈS : Service mis à jour.</div>" . $this->executeGet();
+            return "<div class='alert-succes'>SUCCÈS : Service mis à jour.</div>" . $this->executeGet();
         } catch (AuthnException $e) {
-            return "<p style='color:red'>" . $e->getMessage() . "</p>";
+            return "<p class='alert-erreur'>" . $e->getMessage() . "</p>";
         } catch (\Exception $e) {
-            return "<div style='color:red'>ERREUR : " . $e->getMessage() . "</div>" . $this->executeGet();
+            return "<div class='alert-erreur'>ERREUR : " . $e->getMessage() . "</div>" . $this->executeGet();
         }
     }
 }

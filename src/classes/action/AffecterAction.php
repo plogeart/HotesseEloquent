@@ -11,7 +11,7 @@ class AffecterAction extends Action {
         try {
             Authz::checkRoleGestionnaire();
         } catch (AuthnException $e) {
-            return "<p style='color:red'>" . $e->getMessage() . "</p>";
+            return "<p class='alert-erreur'>" . $e->getMessage() . "</p>";
         }
 
         return <<<HTML
@@ -29,12 +29,12 @@ class AffecterAction extends Action {
             Authz::checkRoleGestionnaire();
 
             ZenManager::affecterHotesse((int)$_POST['numhot'], (int)$_POST['numcab']);
-            return "<div style='color:green;'>SUCCÈS : Hôtesse affectée.</div>" . $this->executeGet();
+            return "<div class='alert-succes'>SUCCÈS : Hôtesse affectée.</div>" . $this->executeGet();
 
         } catch (AuthnException $e) {
-            return "<p style='color:red'>" . $e->getMessage() . "</p>";
+            return "<p class='alert-erreur'>" . $e->getMessage() . "</p>";
         } catch (\Exception $e) {
-            return "<div style='color:red'>ERREUR : " . $e->getMessage() . "</div>" . $this->executeGet();
+            return "<div class='alert-erreur'>ERREUR : " . $e->getMessage() . "</div>" . $this->executeGet();
         }
     }
 }

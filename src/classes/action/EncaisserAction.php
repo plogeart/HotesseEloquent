@@ -11,7 +11,7 @@ class EncaisserAction extends Action {
         try {
             Authz::checkRoleGestionnaire();
         } catch (AuthnException $e) {
-            return "<p style='color:red'>" . $e->getMessage() . "</p>";
+            return "<p class='alert-erreur'>" . $e->getMessage() . "</p>";
         }
 
         return <<<HTML
@@ -34,11 +34,11 @@ class EncaisserAction extends Action {
             Authz::checkRoleGestionnaire();
 
             $total = ZenManager::encaisserReservation((int)$_POST['numres'], $_POST['mode']);
-            return "<div style='color:green;'>SUCCÈS : Paiement de <strong>$total €</strong> validé.</div>" . $this->executeGet();
+            return "<div class='alert-succes'>SUCCÈS : Paiement de <strong>$total €</strong> validé.</div>" . $this->executeGet();
         } catch (AuthnException $e) {
-            return "<p style='color:red'>" . $e->getMessage() . "</p>";
+            return "<p class='alert-erreur'>" . $e->getMessage() . "</p>";
         } catch (\Exception $e) {
-            return "<div style='color:red'>ERREUR : " . $e->getMessage() . "</div>" . $this->executeGet();
+            return "<div class='alert-erreur'>ERREUR : " . $e->getMessage() . "</div>" . $this->executeGet();
         }
     }
 }

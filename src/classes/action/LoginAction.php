@@ -26,7 +26,7 @@ class LoginAction extends Action {
             return $action->execute();
 
         } catch (\Exception $e) {
-            return "<p style='color:red'>Erreur : " . $e->getMessage() . "</p>" . $this->executeGet();
+            return "<p class='alert-erreur'>Erreur : " . $e->getMessage() . "</p>" . $this->executeGet();
         }
     }
 }

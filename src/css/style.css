@@ -34,11 +34,11 @@ h3 {
 }
 
 .alert-erreur {
-    background: #ed9ba2;
+    background: #efb2b8;
     padding: 5px;
     margin: 10px 0;
     font-weight: bold;
-    color: red;
+    color: #830000;
 }
 
 .alert-succes {
